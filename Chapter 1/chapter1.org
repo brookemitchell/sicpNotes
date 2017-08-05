@@ -1,0 +1,219 @@
+* Foreword and dedication
+
+* Quotes
+     Is it possible that software is not like anything else, that it is
+     meant to be discarded: that the whole point is to always see it as
+     a soap bubble?
+
+     --Alan J. Perlis
+
+    "I think that it's extraordinarily important that we in computer
+    science keep fun in computing.  When it started out, it was an
+    awful lot of fun.  Of course, the paying customers got shafted
+    every now and then, and after a while we began to take their
+    complaints seriously.  We began to feel as if we really were
+    responsible for the successful, error-free perfect use of these
+    machines.  I don't think we are.  I think we're responsible for
+    stretching them, setting them off in new directions, and keeping
+    fun in the house.  I hope the field of computer science never
+    loses its sense of fun.  Above all, I hope we don't become
+    missionaries.  Don't feel as if you're Bible salesmen.  The world
+    has too many of those already.  What you know about computing
+    other people will learn.  Don't feel as if the key to successful
+    computing is only in your hands.  What's in your hands, I think
+    and hope, is intelligence: the ability to see the machine as more
+    than when you were first led up to it, that you can make it more."
+
+      --Alan J. Perlis (April 1, 1922  February 7, 1990)
+
+      The acts of the mind, wherein it exerts its power over simple
+      ideas, are chiefly these three: 1. Combining several simple ideas
+      into one compound one, and thus all complex ideas are made.  2.
+      The second is bringing two ideas, whether simple or complex,
+      together, and setting them by one another so as to take a view of
+      them at once, without uniting them into one, by which it gets all
+      its ideas of relations.  3.  The third is separating them from all
+      other ideas that accompany them in their real existence: this is
+      called abstraction, and thus all its general ideas are made.
+
+      --John Locke, _An Essay Concerning Human Understanding_ (1690)
+
+
+* Foreword
+   Our traffic with the subject matter of this book involves us with three foci of phenomena: the human mind, collections of computer programs, and the computer.  
+
+   Every computer program is a model, hatched in the mind, of a real or mental process. These processes, arising from human experience and thought, are huge in number, intricate in detail, and at any time only partially understood. They are modeled to our permanent satisfaction rarely by our computer programs.
+
+  Thus even though our programs are carefully handcrafted discrete collections of symbols, mosaics of interlocking functions, they continually evolve: we change them as our perception of the model deepens, enlarges, generalizes until the model ultimately attains a metastable place within still another model with which we struggle.  The source of the exhilaration associated with computer programming is the continual unfolding within the mind and on the computer of mechanisms expressed as programs and the explosion of perception they generate.  If art interprets our dreams, the computer executes them in the guise of programs!
+
+   Since large programs grow from small ones, it is crucial that we develop an arsenal of standard program structures of whose correctness we have become sure--we call them idioms--and learn to combine them into larger structures using organizational techniques of proven value.  These techniques are treated at length in this book, and understanding them is essential to participation in the Promethean enterprise called programming.  More than anything else, the uncovering and mastery of powerful organizational techniques accelerates our ability to create large, significant programs.  Conversely, since writing large programs is very taxing, we are stimulated to invent new methods of reducing the mass of function and detail to be fitted into large programs.
+   
+   
+* Chapter 1
+   We are about to study the idea of a "computational process".
+Computational processes are abstract beings that inhabit computers.  As
+they evolve, processes manipulate other abstract things called "data".
+The evolution of a process is directed by a pattern of rules called a "program".
+
+** 1.1 The Elements of Programming
+   Idea, programming as symbol interpretation, reasoning
+*** Intro
+ when we describe a language, we should pay particular attention to the
+ means that the language provides for combining simple ideas to form
+ more complex ideas.  Every powerful language has three mechanisms for
+ accomplishing this:
+
+ "primitive expressions"
+      which represent the simplest entities the language is concerned
+      with,
+
+ "means of combination"
+      by which compound elements are built from simpler ones, and
+
+ "means of abstraction"
+      by which compound elements can be named and manipulated as units.
+
+   In programming, we deal with two kinds of elements: procedures and data
+
+*** 1.1.1 Expressions
+Lisp expressions, pretty basic intro to prefix notation.
+     (+ 21 35 12 7)
+     75
+
+*** 1.1.2 Naming and the Environment
+    -- creating vaiable
+     (define size 2)
+
+   -- It should be clear that the possibility of associating values with
+symbols and later retrieving them means that the interpreter must
+maintain some sort of memory that keeps track of the name-object pairs.
+This memory is called the "environment" (more precisely the "global
+environment", since we will see later that a computation may involve a
+number of different environments).(2)
+
+*** 1.1.3 Evaluating Combinations
+    
+One of our goals in this chapter is to isolate issues about thinking
+procedurally.  As a case in point, let us consider that, in evaluating
+combinations, the interpreter is itself following a procedure.
+
+     To evaluate a combination, do the following:
+
+       1. Evaluate the subexpressions of the combination.
+
+       2. Apply the procedure that is the value of the leftmost
+          subexpression (the operator) to the arguments that are the
+          values of the other subexpressions (the operands).
+
+
+   Even this simple rule illustrates some important points about
+processes in general.  First, observe that the first step dictates that
+in order to accomplish the evaluation process for a combination we must
+first perform the evaluation process on each element of the
+combination.  Thus, the evaluation rule is "recursive" in nature; that
+is, it includes, as one of its steps, the need to invoke the rule
+itself.(1)
+
+everything as recursion
+
+**** Evaluation rule
+     To evaluate a combination, do the following:
+
+       1. Evaluate the subexpressions of the combination.
+
+       2. Apply the procedure that is the value of the leftmost
+          subexpression (the operator) to the arguments that are the
+          values of the other subexpressions (the operands).
+*** 1.1.4 Compound Procedures
+   Now we will learn about "procedure definitions", a much more powerful
+abstraction technique by which a compound operation can be given a name
+and then referred to as a unit.
+     (define (square    x)         (*      x         x))
+       |        |       |           |      |         |
+      To     square  something,  multiply  it  by  itself.
+*** 1.1.5 The Substitution Model for Procedure Application
+**** Outline of the model
+     To apply a compound procedure to arguments, evaluate the body of
+     the procedure with each formal parameter replaced by the
+     corresponding argument.
+
+   To illustrate this process, let's evaluate the combination
+     (f 5)
+
+where `f' is the procedure defined in section *Note 1-1-4::.  We begin
+by retrieving the body of `f':
+
+     (sum-of-squares (+ a 1) (* a 2))
+
+   Then we replace the formal parameter `a' by the argument 5:
+
+     (sum-of-squares (+ 5 1) (* 5 2))
+
+**** Problems with the model
+
+The process we have just described is called the "substitution model" for procedure application.  It can be taken as a model that determines
+the "meaning" of procedure application, insofar as the procedures in
+this chapter are concerned.  However, there are two points that should
+be stressed:
+
+   * The purpose of the substitution is to help us think about procedure
+     application, not to provide a description of how the interpreter
+     really works.  Typical interpreters do not evaluate procedure
+     applications by manipulating the text of a procedure to substitute
+     values for the formal parameters.  In practice, the "substitution"
+     is accomplished by using a local environment for the formal
+     parameters.  We will discuss this more fully in *Note Chapter 3::
+     and *Note Chapter 4:: when we examine the implementation of an
+     interpreter in detail.
+
+   * Over the course of this book, we will present a sequence of
+     increasingly elaborate models of how interpreters work,
+     culminating with a complete implementation of an interpreter and
+     compiler in *Note Chapter 5::.  The substitution model is only the
+     first of these models--a way to get started thinking formally
+     about the evaluation process.  In general, when modeling phenomena
+     in science and engineering, we begin with simplified, incomplete
+     models.  As we examine things in greater detail, these simple
+     models become inadequate and must be replaced by more refined
+     models.  The substitution model is no exception.  In particular,
+     when we address in *Note Chapter 3:: the use of procedures with
+     "mutable data," we will see that the substitution model breaks
+     down and must be replaced by a more complicated model of procedure
+     application.(1)
+
+**** Applicative order versus normal order
+
+   This alternative "fully expand and then reduce" evaluation method is
+known as "normal-order evaluation", in contrast to the "evaluate the
+arguments and then apply" method that the interpreter actually uses,
+which is called "applicative-order evaluation".  It can be shown that,
+for procedure applications that can be modeled using substitution
+(including all the procedures in the first two chapters of this book)
+and that yield legitimate values, normal-order and applicative-order
+evaluation produce the same value.  (See *Note Exercise 1-5:: for an
+instance of an "illegitimate" value where normal-order and
+applicative-order evaluation do not give the same result.)
+*** 1.1.6 Conditional Expressions and Predicates
+   This construct is called a "case analysis", and there is a special
+form in Lisp for notating such a case analysis.  It is called `cond'
+(which stands for "conditional"), and it is used as follows:
+
+     (define (abs x)
+       (cond ((> x 0) x)
+             ((= x 0) 0)
+             ((< x 0) (- x))))
+
+   The general form of a conditional expression is
+
+     (cond (<P1> <E1>)
+           (<P2> <E2>)
+           ...
+           (<PN> <EN>))
+
+consisting of the symbol `cond' followed by parenthesized pairs of
+expressions
+
+     (<P> <E>)
+
+called "clauses". The first expression in each pair is a "predicate"--that
+is, an expression whose value is interpreted as either true or false.(1)
